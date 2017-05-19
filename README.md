@@ -11,7 +11,7 @@ MuttAliases: Manipulate Mutt Aliases File
 SYNOPSIS
 ========
 
-MuttAliases <command> <email substring>
+MuttAliases 'command' 'optional email substring'
 
 Where command is one of the following:
 

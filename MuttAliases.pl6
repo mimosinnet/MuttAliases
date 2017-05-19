@@ -77,12 +77,11 @@ class File {
 	=head3 METHODS
 	=para All methods belong to class File
 
-	# Method Print {{{
-	=head4 print
+	# Method list {{{
+	=head4 list
 	=para Sorts and prints registers
 
-	method print { 
-
+	method list { 
 		my @sorted = self.registers.sort(*[0]);
 		for @sorted -> @register {
 			my $register = @register[2];
@@ -114,6 +113,38 @@ class File {
 	}
 	# }}}
 
+	# Method add {{{
+	=head4 add 
+	=para Add alias in aliases file
+
+	method add {
+		my $register = Alias.new(
+			alias => prompt("Alias: "),
+			name  => prompt("name: "),
+			email => prompt("email: "),
+		);
+		my $fh = open "aliases", :a;
+		$fh.say: ("alias",$register.alias,$register.name,"<" ~ $register.email ~ ">").join(' ');
+		$fh.close;
+		my $changes = qx{tail aliases};
+		say $changes;
+	}
+	# }}} 
+
+	# Method Find {{{
+	=head4 find
+	=para Find alias
+
+	method find (Str $find) { 
+		for self.registers -> @line {
+			if @line[0].contains($find) || @line[1].contains($find) {
+				my $register = @line[2];
+				say ("alias",$register.alias,$register.name,$register.email).join(' ') 
+			}
+		}
+	}
+	# }}}
+
 	# Method Del {{{
 	=head4 del
 	=para Asks for email address to delete and deletes alias record. 
@@ -136,40 +167,6 @@ class File {
 	}
 	# }}}
 
-	# Method Find {{{
-	=head4 find
-	=para Find alias
-
-	method find (Str $find) { 
-		for self.registers -> @line {
-			if @line[0].contains($find) || @line[1].contains($find) {
-				my $register = @line[2];
-				say ("alias",$register.alias,$register.name,$register.email).join(' ') 
-			}
-		}
-	}
-	# }}}
-
-	# Method insert {{{
-	=head4 add 
-	=para Add alias in aliases file
-
-	method add {
-		my $register = Alias.new(
-			alias => prompt("Alias: "),
-			name  => prompt("name: "),
-			email => prompt("email: "),
-		);
-		my $fh = open "aliases", :a;
-		$fh.say: ("alias",$register.alias,$register.name,"<" ~ $register.email ~ ">").join(' ');
-		$fh.close;
-		my $changes = qx{tail aliases};
-		say $changes;
-	}
-
-	
-	# }}} 
-
 	# Private Method Write {{{ 
 	method !write_file (@array, $condition) { 
 		"aliases".IO.move: "aliases.old";
@@ -187,8 +184,6 @@ class File {
 	# End definition of Methods of Class File }}}
 
 }
-
-
 # End definition of class File }}}
 
 # End File Class and Methods Definition }}}
@@ -197,7 +192,7 @@ class File {
 
 multi MAIN( Str $command where { $command eq <list dups sort add >.any } ) {
 	given $command {
-		when "list" {File.new.print;}
+		when "list" {File.new.list;}
 		when "dups" {File.new.dups;}
 		when "sort" {File.new.sort;}
 		when "add"  {File.new.add;}

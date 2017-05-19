@@ -52,7 +52,7 @@ Reads alises files and stores registers in an Alias object.
 
 All methods belong to class File
 
-#### print
+#### list
 
 Sorts and prints registers
 
@@ -64,14 +64,14 @@ Find duplicated registers based on the email
 
 Sorts aliases based on alises and writes files to disk
 
-#### del
+#### add 
 
-Asks for email address to delete and deletes alias record. 
+Add alias in aliases file
 
 #### find
 
 Find alias
 
-#### add 
+#### del
 
-Add alias in aliases file
+Asks for email address to delete and deletes alias record. 

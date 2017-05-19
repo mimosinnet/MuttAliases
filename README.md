@@ -3,9 +3,6 @@ IMPORTANT
 
 This script is in working progress. Please, backup your alias file before using this script.
 
-DESCRIPTION
-===========
-
 NAME
 ====
 
@@ -14,19 +11,21 @@ MuttAliases: Manipulate Mutt Aliases File
 SYNOPSIS
 ========
 
-MuttAliases print|dups|sort|del|insert|find
+MuttAliases <command> <email substring>
 
-  * print: list aliases
+Where command is one of the following:
+
+  * list: list aliases
 
   * dups: find duplicate aliases
 
   * sort: sort aliasses file
 
+  * add: add alias in alias file
+
   * del 'email': delete alias from alias file
 
-  * insert: insert alias in alias file
-
-  * find: find alias in alias file
+  * find 'email: find alias in alias file
 
 DESCRIPTION
 ===========

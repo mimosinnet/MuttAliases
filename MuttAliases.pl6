@@ -3,21 +3,32 @@ use v6;
 
 # Description of MuttAliases {{{
 
-=head1 IMPORTANT
-=para This script is in working progress. Please, backup your alias file before using this script.
-
-=head1 DESCRIPTION
+=IMPORTANT This script is in working progress. Please, backup your alias file before using this script.
 
 =NAME MuttAliases: Manipulate Mutt Aliases File
 
-=SYNOPSIS MuttAliases print|dups|sort|del|insert|find
+=SYNOPSIS MuttAliases <command> <email substring>
 
-=item print:			list aliases
-=item dups: 			find duplicate aliases
-=item sort: 			sort aliasses file
+=para Where command is one of the following:
+
+=item list:	list aliases
+=item dups: find duplicate aliases
+=item sort: sort aliasses file
+=item add: add alias in alias file
 =item del 'email': delete alias from alias file
-=item insert: 		insert alias in alias file
-=item find:			find alias in alias file
+=item find 'email:	find alias in alias file
+
+sub USAGE() {
+	say(
+	"Usage: 
+		{$*PROGRAM-NAME} list
+		{$*PROGRAM-NAME} dups
+		{$*PROGRAM-NAME} sort
+		{$*PROGRAM-NAME} add
+		{$*PROGRAM-NAME} del 'email'
+		{$*PROGRAM-NAME} find 'email'"
+	);
+}
 
 =DESCRIPTION MuttAliases manipulates Mutt Aliases files
 
@@ -198,18 +209,6 @@ multi MAIN( Str $command where { $command eq <del find>.any },
 		when "del"  { File.new.del:  $email }
 		when "find" { File.new.find: $email }
 	}
-}
-
-sub USAGE() {
-	say(
-	"Usage: 
-		{$*PROGRAM-NAME} list
-		{$*PROGRAM-NAME} dups
-		{$*PROGRAM-NAME} sort
-		{$*PROGRAM-NAME} add
-		{$*PROGRAM-NAME} del 'email'
-		{$*PROGRAM-NAME} find 'email'"
-	);
 }
 
 # End of multi MAIN definition}}}

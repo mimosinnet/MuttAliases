@@ -126,7 +126,7 @@ class File {
 
 	# Method Find {{{
 	=head4 find
-	=para Finds registers
+	=para Find alias
 
 	method find (Str $find) { 
 		for self.registers -> @line {
@@ -137,6 +137,26 @@ class File {
 		}
 	}
 	# }}}
+
+	# Method insert {{{
+	=head4 add 
+	=para Add alias in aliases file
+
+	method add {
+		my $register = Alias.new(
+			alias => prompt("Alias: "),
+			name  => prompt("name: "),
+			email => prompt("email: "),
+		);
+		my $fh = open "aliases", :a;
+		$fh.say: ("alias",$register.alias,$register.name,"<" ~ $register.email ~ ">").join(' ');
+		$fh.close;
+		my $changes = qx{tail aliases};
+		say $changes;
+	}
+
+	
+	# }}} 
 
 	# Private Method Write {{{ 
 	method !write_file (@array, $condition) { 
@@ -163,42 +183,33 @@ class File {
 
 # multi MAIN definition {{{
 
-multi MAIN('print') {
-	my $file = File.new();
-	$file.print;
+multi MAIN( Str $command where { $command eq <list dups sort add >.any } ) {
+	given $command {
+		when "list" {File.new.print;}
+		when "dups" {File.new.dups;}
+		when "sort" {File.new.sort;}
+		when "add"  {File.new.add;}
+	}
 }
 
-multi MAIN('dups') {
-	my $file = File.new();
-	$file.dups;
+multi MAIN( Str $command where { $command eq <del find>.any }, 
+						Str $email ) {
+	given $command {
+		when "del"  { File.new.del:  $email }
+		when "find" { File.new.find: $email }
+	}
 }
 
-multi MAIN('sort') {
-	my $file = File.new();
-	$file.sort;
-}
-
-multi MAIN('del', Str $email) {
-	my $file = File.new();
-	$file.del: $email;
-}
-
-multi MAIN('insert') {
-	my $register = Alias.new(
-		alias => prompt("Alias: "),
-		name  => prompt("name: "),
-		email => prompt("email: "),
+sub USAGE() {
+	say(
+	"Usage: 
+		{$*PROGRAM-NAME} list
+		{$*PROGRAM-NAME} dups
+		{$*PROGRAM-NAME} sort
+		{$*PROGRAM-NAME} add
+		{$*PROGRAM-NAME} del 'email'
+		{$*PROGRAM-NAME} find 'email'"
 	);
-	my $fh = open "aliases", :a;
-	$fh.say: ("alias",$register.alias,$register.name,"<" ~ $register.email ~ ">").join(' ');
-	$fh.close;
-	my $changes = qx{tail aliases};
-	say $changes;
-}
-
-multi MAIN('find', Str $find) {
-	my $file = File.new();
-	$file.find: $find;
 }
 
 # End of multi MAIN definition}}}

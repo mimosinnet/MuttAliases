@@ -70,4 +70,8 @@ Asks for email address to delete and deletes alias record.
 
 #### find
 
-Finds registers
+Find alias
+
+#### add 
+
+Add alias in aliases file

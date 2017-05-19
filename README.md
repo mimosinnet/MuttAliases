@@ -19,13 +19,19 @@ Where command is one of the following:
 
   * dups: find duplicate aliases
 
-  * sort: sort aliasses file
+  * sort: sort aliasses and save them to file
 
   * add: add alias in alias file
 
+  * find 'email: find alias in alias file
+
   * del 'email': delete alias from alias file
 
-  * find 'email: find alias in alias file
+Examples:
+
+  * MuttAliases list
+
+  * MuttAliases del gmail <- Deletes e-mail with the string 'gmail'
 
 CLASSES
 =======

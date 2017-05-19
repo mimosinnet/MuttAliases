@@ -10,24 +10,27 @@ use v6;
 =SYNOPSIS MuttAliases 'command' 'optional email substring'
 
 =para Where command is one of the following:
-
 =item list:	list aliases
 =item dups: find duplicate aliases
-=item sort: sort aliasses file
+=item sort: sort aliasses and save them to file
 =item add: add alias in alias file
-=item del 'email': delete alias from alias file
 =item find 'email:	find alias in alias file
+=item del 'email': delete alias from alias file
+
+=para Examples:
+=item MuttAliases list
+=item MuttAliases del  gmail  <- Deletes e-mail with the string 'gmail'
 
 sub USAGE() {
-	say(
-	"Usage: 
+	say("
+	Usage: 
 		{$*PROGRAM-NAME} list
 		{$*PROGRAM-NAME} dups
 		{$*PROGRAM-NAME} sort
 		{$*PROGRAM-NAME} add
+		{$*PROGRAM-NAME} find 'email'
 		{$*PROGRAM-NAME} del 'email'
-		{$*PROGRAM-NAME} find 'email'"
-	);
+	");
 }
 
 # End Description }}}

@@ -30,8 +30,6 @@ sub USAGE() {
 	);
 }
 
-=DESCRIPTION MuttAliases manipulates Mutt Aliases files
-
 # End Description }}}
 
 # Definition of Classes and Methods {{{

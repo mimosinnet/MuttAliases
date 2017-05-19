@@ -27,11 +27,6 @@ Where command is one of the following:
 
   * find 'email: find alias in alias file
 
-DESCRIPTION
-===========
-
-MuttAliases manipulates Mutt Aliases files
-
 CLASSES
 =======
 

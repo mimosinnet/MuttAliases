@@ -7,7 +7,7 @@ use v6;
 
 =NAME MuttAliases: Manipulate Mutt Aliases File
 
-=SYNOPSIS MuttAliases <command> <email substring>
+=SYNOPSIS MuttAliases 'command' 'optional email substring'
 
 =para Where command is one of the following:
 

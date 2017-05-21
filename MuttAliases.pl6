@@ -3,7 +3,7 @@ use v6;
 
 # Description of MuttAliases {{{
 
-=IMPORTANT This script is in working progress. Please, backup your alias file before using this script.
+=IMPORTANT This script is work in progress. Please, backup your alias file before using it.
 
 =NAME MuttAliases: Manipulate Mutt Aliases File
 
@@ -12,9 +12,9 @@ use v6;
 =para Where command is one of the following:
 =item list:	list aliases
 =item dups: find duplicate aliases
-=item sort: sort aliasses and save them to file
+=item sort: sort aliases and save them to file
 =item add: add alias in alias file
-=item find 'email:	find alias in alias file
+=item find 'string':	find 'string' in alias or email
 =item del 'email': delete alias from alias file
 
 =para Examples:
@@ -28,10 +28,13 @@ sub USAGE() {
 		{$*PROGRAM-NAME} dups
 		{$*PROGRAM-NAME} sort
 		{$*PROGRAM-NAME} add
-		{$*PROGRAM-NAME} find 'email'
+		{$*PROGRAM-NAME} find 'string'
 		{$*PROGRAM-NAME} del 'email'
 	");
 }
+
+=TODO
+- The aliases file has three fields: alias, name, email. The command 'find' does a search on the field 'alias' and 'email', but not in the field 'name'. 
 
 # End Description }}}
 
@@ -56,11 +59,22 @@ class Alias {
 
 class File { 
 	has Array @.registers; # alias, email, Alias Object
-	has Alias $.alias;
+	has Str		$!filename;
 
 	# Reads alias file and BUILDs object {{{
-	submethod BUILD { 
-		for 'aliases'.IO.lines -> $line {
+	submethod BUILD {
+		{
+			when "$*HOME/.mutt/aliases".IO ~~ :e & :rw 			{ $!filename = "$*HOME/.mutt/aliases" }
+			when "$*HOME/.mutt/data/aliases".IO ~~ :e & :rw { $!filename = "$*HOME/.mutt/data/aliases" }
+			when "$*HOME/.config/muttalias/muttaliasrc".IO ~~ :e & :r { 
+				$!filename = read-config("$*HOME/.config/muttalias/muttaliasrc", "alias_file");
+			}
+			when "$*HOME/..muttaliasrc".IO ~~ :e & :r {
+				$!filename = read-config("$*HOME/..muttaliasrc", "alias_file");
+			}
+		}
+
+		for $!filename.IO.lines -> $line {
 			next unless $line ~~ /^alias/; # next if we do not define any alias
 			my @elements = $line.split(/\s+/);
 			@elements.shift;
@@ -70,8 +84,24 @@ class File {
 			my $register = Alias.new( alias => $alias, email => $email, name  => $name);
 			self.registers.push: ($alias, $email, $register).Array;
 		}
-	}
-	# }}}
+	} # }}}
+	
+	# sub reading config file with format 'option = value' {{{
+	sub read-config ( Str $path, Str $config_option ) {
+		my %options;
+		my $fh = open($path, :r);
+		while $fh.lines -> $line {
+			$line ~~ /
+				$<option> = (\S+)
+				\s* \= \s*
+				$<value>	= (\S+)
+			/;
+			%options{$<option>.Str} = $<value>.Str;
+		}
+		$fh.close;
+		die "Sorry! Unable to find option '$config_option' in '$path' configuration filei \n\n\n" unless %options{$config_option}.defined;
+		return %options{$config_option};
+	} # }}}
 
 	# Methods definitions of Class File {{{
 	=head3 METHODS
@@ -109,6 +139,7 @@ class File {
 	method sort { 
 		my @sorted = self.registers.sort(*[0]);
 
+		# Write registers to file unless e-mail contains @@@@@. In other words, write all regisers.
 		self!write_file(@sorted,"@@@@@");
 	}
 	# }}}
@@ -133,7 +164,7 @@ class File {
 
 	# Method Find {{{
 	=head4 find
-	=para Find alias
+	=para Find string in alias or email
 
 	method find (Str $find) { 
 		for self.registers -> @line {

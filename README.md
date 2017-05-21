@@ -1,7 +1,7 @@
 IMPORTANT
 =========
 
-This script is in working progress. Please, backup your alias file before using this script.
+This script is work in progress. Please, backup your alias file before using it.
 
 NAME
 ====
@@ -19,11 +19,11 @@ Where command is one of the following:
 
   * dups: find duplicate aliases
 
-  * sort: sort aliasses and save them to file
+  * sort: sort aliases and save them to file
 
   * add: add alias in alias file
 
-  * find 'email: find alias in alias file
+  * find 'string': find 'string' in alias or email
 
   * del 'email': delete alias from alias file
 
@@ -32,6 +32,11 @@ Examples:
   * MuttAliases list
 
   * MuttAliases del gmail <- Deletes e-mail with the string 'gmail'
+
+TODO
+====
+
+- The aliases file has three fields: alias, name, email. The command 'find' does a search on the field 'alias' and 'email', but not in the field 'name'. 
 
 CLASSES
 =======
@@ -70,7 +75,7 @@ Add alias in aliases file
 
 #### find
 
-Find alias
+Find string in alias or email
 
 #### del
 

@@ -33,6 +33,14 @@ sub USAGE() {
 	");
 }
 
+=CONFIGURATION
+MuttAliases looks if the files B<~/mutt/aliases> or B<~/mutt/data/aliases> exist. If MuttAliases does not find one of these files, it reads the configuratin file B<~/.config/muttalias/muttaliasrc> or B<~/.muttaliasrc>. The format of this file is in the format:
+B<option = value>
+The only option defined at this moment is 'alias_file'.
+
+=para Example of B<~/.config/muttalias/muttaliasrc>:
+=para alias_file = /home/mimosinnet/.mutt/data/aliases 
+
 =TODO
 - The aliases file has three fields: alias, name, email. The command 'find' does a search on the field 'alias' and 'email', but not in the field 'name'. 
 
@@ -70,7 +78,7 @@ class File {
 				$!filename = read-config("$*HOME/.config/muttalias/muttaliasrc", "alias_file");
 			}
 			when "$*HOME/..muttaliasrc".IO ~~ :e & :r {
-				$!filename = read-config("$*HOME/..muttaliasrc", "alias_file");
+				$!filename = read-config("$*HOME/.muttaliasrc", "alias_file");
 			}
 		}
 

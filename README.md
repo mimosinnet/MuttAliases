@@ -33,6 +33,15 @@ Examples:
 
   * MuttAliases del gmail <- Deletes e-mail with the string 'gmail'
 
+CONFIGURATION
+=============
+
+MuttAliases looks if the files **~/mutt/aliases** or **~/mutt/data/aliases** exist. If MuttAliases does not find one of these files, it reads the configuratin file **~/.config/muttalias/muttaliasrc** or **~/.muttaliasrc**. The format of this file is in the format: **option = value** The only option defined at this moment is 'alias_file'.
+
+Example of **~/.config/muttalias/muttaliasrc**:
+
+alias_file = /home/mimosinnet/.mutt/data/aliases 
+
 TODO
 ====
 
